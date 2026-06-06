@@ -1,0 +1,25 @@
+FROM jenkins/inbound-agent:latest
+
+USER root
+
+# Install Java 17
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    && mkdir -p /opt/java \
+    && wget https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.11%2B9/OpenJDK17U-jdk_x64_linux_hotspot_17.0.11_9.tar.gz -O /tmp/java17.tar.gz \
+    && tar -xzf /tmp/java17.tar.gz -C /opt/java \
+    && rm /tmp/java17.tar.gz \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Gradle via GitHub releases
+RUN wget https://github.com/gradle/gradle-distributions/releases/download/v9.5.1/gradle-9.5.1-bin.zip -P /tmp && \
+    unzip /tmp/gradle-9.5.1-bin.zip -d /opt && \
+    ln -s /opt/gradle-9.5.1/bin/gradle /usr/local/bin/gradle && \
+    rm /tmp/gradle-9.5.1-bin.zip
+
+# Set Java environment
+ENV JAVA_HOME=/opt/java/jdk-17.0.11+9
+ENV PATH=$JAVA_HOME/bin:$PATH
+
+USER jenkins

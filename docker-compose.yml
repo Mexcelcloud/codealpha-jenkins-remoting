@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+
+  jenkins-master:
+    build:
+      context: .
+      dockerfile: Dockerfile.master
+    container_name: jenkins-master
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - jenkins-network
+
+  jenkins-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    container_name: jenkins-agent
+    depends_on:
+      - jenkins-master
+    environment:
+      - JENKINS_URL=http://jenkins-master:8080
+      - JENKINS_AGENT_NAME=quickcart-agent
+      - JENKINS_SECRET=${JENKINS_SECRET}
+      - JENKINS_WEB_SOCKET=true
+    networks:
+      - jenkins-network
+
+volumes:
+  jenkins_home:
+
+networks:
+  jenkins-network:
+    driver: bridge

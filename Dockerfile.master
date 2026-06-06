@@ -1,0 +1,25 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+# Install Gradle
+RUN apt-get update && apt-get install -y wget unzip && \
+    wget https://github.com/gradle/gradle-distributions/releases/download/v9.5.1/gradle-9.5.1-bin.zip -P /tmp && \
+    unzip /tmp/gradle-9.5.1-bin.zip -d /opt && \
+    rm /tmp/gradle-9.5.1-bin.zip && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH=$PATH:/opt/gradle-9.5.1/bin
+
+USER jenkins
+
+# Skip setup wizard
+ENV JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+
+# Install required plugins
+RUN jenkins-plugin-cli --plugins \
+    pipeline-model-definition \
+    git \
+    workflow-aggregator \
+    instance-identity \
+    ws-cleanup
