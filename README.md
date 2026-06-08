@@ -338,7 +338,7 @@ sh '/opt/gradle-9.5.1/bin/gradle clean build -x test'
 
 ---
 
-### Challenge 4 — Gradle Dependencies Could Not Resolve Inside Container
+### Challenge 4: Gradle Dependencies Could Not Resolve Inside Container
 
 **What happened:**
 Even with Gradle installed, the build failed with:
