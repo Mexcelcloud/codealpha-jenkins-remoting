@@ -1,8 +1,8 @@
 # codealpha-jenkins-remoting
 
-**QuickCart API — Distributed Build System with Jenkins**
+**QuickCart API  Distributed Build System with Jenkins**
 
-> Part of the QuickCart DevOps Pipeline Series | CodeAlpha DevOps Internship — Task 2
+> Part of the QuickCart DevOps Pipeline Series | CodeAlpha DevOps Internship Task 2
 
 ---
 
@@ -95,14 +95,14 @@ docker-compose --version
 
 ## Setup Instructions
 
-### Step 1 — Clone this repository
+### Step 1: Clone this repository
 
 ```bash
 git clone https://github.com/Mexcelcloud/codealpha-jenkins-remoting.git
 cd codealpha-jenkins-remoting
 ```
 
-### Step 2 — Start Jenkins Master and Agent
+### Step 2: Start Jenkins Master and Agent
 
 ```bash
 docker-compose up -d
@@ -126,7 +126,7 @@ xxxxxxxxxxxx   jenkins-master    Up 2 minutes   jenkins-master
 xxxxxxxxxxxx   jenkins-agent     Up 2 minutes   jenkins-agent
 ```
 
-### Step 3 — Access Jenkins Dashboard
+### Step 3: Access Jenkins Dashboard
 
 Open your browser and go to:
 ```
@@ -135,7 +135,7 @@ http://localhost:8080
 
 Jenkins opens directly to the dashboard — no setup wizard because plugins are pre-installed via `Dockerfile.master`.
 
-### Step 4 — Connect the Agent
+### Step 4: Connect the Agent
 
 1. Go to **Manage Jenkins → Nodes → New Node**
 2. Node name: `quickcart-agent`
@@ -147,7 +147,7 @@ Jenkins opens directly to the dashboard — no setup wizard because plugins are 
 5. Click **Save**
 6. Copy the **secret token** shown on the agent page
 
-### Step 5 — Start the Agent with the Secret
+### Step 5: Start the Agent with the Secret
 
 Create a `.env` file in the project folder:
 ```bash
@@ -162,7 +162,7 @@ docker-compose down
 docker-compose up -d
 ```
 
-### Step 6 — Copy Gradle into the Master Container
+### Step 6: Copy Gradle into the Master Container
 
 Since the Jenkins container runs in an isolated environment, copy Gradle directly from your machine:
 
@@ -170,7 +170,7 @@ Since the Jenkins container runs in an isolated environment, copy Gradle directl
 docker cp C:\Gradle\gradle-9.5.1 jenkins-master:/opt/gradle-9.5.1
 ```
 
-### Step 7 — Copy Gradle Cache into the Master Container
+### Step 7: Copy Gradle Cache into the Master Container
 
 Copy your local Gradle dependency cache so the build does not need internet access:
 
@@ -179,7 +179,7 @@ docker cp $env:USERPROFILE\.gradle jenkins-master:/var/jenkins_home/.gradle
 docker exec -u root jenkins-master chown -R jenkins:jenkins /var/jenkins_home/.gradle
 ```
 
-### Step 8 — Create the Pipeline
+### Step 8: Create the Pipeline
 
 1. Go to Jenkins dashboard → **New Item**
 2. Name: `quickcart-pipeline`
@@ -188,7 +188,7 @@ docker exec -u root jenkins-master chown -R jenkins:jenkins /var/jenkins_home/.g
 5. Paste the contents of `Jenkinsfile`
 6. Click **Save**
 
-### Step 9 — Run the Pipeline
+### Step 9: Run the Pipeline
 
 Click **Build Now** on the pipeline page.
 
@@ -212,7 +212,7 @@ All stages complete with green checkmarks:
 Final console output confirms:
 ```
 BUILD SUCCESSFUL — quickcart-api-1.0.0.jar is ready for deployment
-Finished: SUCCESS
+
 ```
 
 ---
@@ -259,11 +259,11 @@ pipeline {
 
 ## Challenges Encountered
 
-This section documents the real engineering problems encountered during setup, why they happened, and how they were resolved. These are documented so that anyone following this setup on a restricted network environment can resolve them without starting from scratch.
+This section documents the engineering problems encountered during setup, why they happened, and how they were resolved.
 
 ---
 
-### Challenge 1 — Jenkins Plugin Installation Failed (Offline Environment)
+### Challenge 1: Jenkins Plugin Installation Failed (Offline Environment)
 
 **What happened:**
 After skipping the setup wizard due to no internet access inside the container, the New Item page only showed **Freestyle Project** — the **Pipeline** option was missing.
@@ -289,7 +289,7 @@ This runs the plugin installation during `docker-compose up` before Jenkins star
 
 ---
 
-### Challenge 2 — Jenkins Agent Failed to Connect (X-Instance-Identity Error)
+### Challenge 2: Jenkins Agent Failed to Connect (X-Instance-Identity Error)
 
 **What happened:**
 The `jenkins-agent` container started successfully but kept printing this error every 10 seconds:
@@ -311,7 +311,7 @@ The `instance-identity` plugin was added to `Dockerfile.master`. After each fres
 
 ---
 
-### Challenge 3 — Gradle Not Found Inside Jenkins Container
+### Challenge 3: Gradle Not Found Inside Jenkins Container
 
 **What happened:**
 The pipeline Build stage failed with:
@@ -430,9 +430,3 @@ The tool changes. The concept does not:
 This repository uses Jenkins — but the pipeline thinking applied here transfers directly to GitHub Actions, GitLab CI, or Azure Pipelines.
 
 ---
-
-## Author
-
-**CodeAlpha DevOps Internship**
-Task 2 — Jenkins Remoting
-QuickCart DevOps Pipeline Series
